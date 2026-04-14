@@ -108,7 +108,8 @@ jobs:
           echo "--- Testing Docker image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.tag }} ---"
           echo "Testing the built Docker image..."
           echo "Testing amd64 architecture..."
-          docker run --rm --platform linux/amd64 -v ${{ github.workspace }}:/workspace ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.tag }} bash -c \
-            "cd /opt/ncs && west build -b nrf52840dk/nrf52840 /workspace/hello_world --pristine"
+          docker run --rm --platform linux/amd64 -v ${{ github.workspace }}:/workspace -w /opt/ncs \
+            --entrypoint /bin/bash ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.tag }} -c \
+            "west build -b nrf52840dk/nrf52840 /workspace/hello_world --pristine"
           echo "---------------------------------------------"
           echo "Testing completed successfully!"

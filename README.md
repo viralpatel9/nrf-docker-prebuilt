@@ -15,4 +15,12 @@ west build \
 
 
 west build --build-dir build hello_world --pristine --board nrf52840dk/nrf52840 -- -DCONFIG_DEBUG_THREAD_INFO=y -DCONF_FILE="prj.conf"
+
+docker run --rm -it \
+  --entrypoint /bin/bash \
+  ghcr.io/viralpatel9/nrf-docker-prebuilt:v0.0.0 \
+  -c "ls -la /opt/ncs"
+
+# This command works for skipping JLink prompt
+docker run --rm -v $(pwd)/hello_world:/workspace/hello_world   -w /opt/ncs/   --entrypoint /bin/bash   ghcr.io/viralpatel9/nrf-docker-prebuilt:v0.0.0   -c "west build -b nrf52840dk/nrf52840 /workspace/hello_world --pristine"
 ```
