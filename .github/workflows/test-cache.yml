@@ -62,7 +62,7 @@ jobs:
 
       - name: Test Docker Image
         run: |
-          echo "--- Testing Docker image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.tag }} ---"
+          echo "--- Testing Cached Docker image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.tag }} ---"
           docker run --rm --platform linux/amd64 -v ${{ github.workspace }}:/workspace -w /opt/ncs \
             --entrypoint /bin/bash ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.tag }} -c \
             "west build -b nrf52840dk/nrf52840 /workspace/hello_world --pristine"
