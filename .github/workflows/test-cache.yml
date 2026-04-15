@@ -44,9 +44,9 @@ jobs:
         uses: actions/cache@v4
         with:
             path: /tmp/docker-cache
-            key: docker-${{ runner.os }}-${{ github.sha }}
+            key: docker-${{ runner.os }}-${{ steps.vars.outputs.tag }}
             restore-keys: |
-              docker-${{ runner.os }}-${{ env.IMAGE_NAME }}-
+              docker-${{ runner.os }}-
 
       - name: Load or pull Docker Image
         run: |
@@ -63,10 +63,7 @@ jobs:
       - name: Test Docker Image
         run: |
           echo "--- Testing Docker image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.tag }} ---"
-          echo "Testing the built Docker image..."
-          echo "Testing amd64 architecture..."
           docker run --rm --platform linux/amd64 -v ${{ github.workspace }}:/workspace -w /opt/ncs \
             --entrypoint /bin/bash ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.tag }} -c \
             "west build -b nrf52840dk/nrf52840 /workspace/hello_world --pristine"
-          echo "---------------------------------------------"
           echo "Testing completed successfully!"
